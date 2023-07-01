@@ -18,20 +18,19 @@ def main():
         framenumber = 0
         input.seek(2048)
         while (frame := input.read(212)):
-            if framenumber % 100 == 0:
-                print(f'Processing SP time {timedelta(seconds=framenumber*512/44100)}', end='\r')
+            print(f'Processing SP time {timedelta(seconds=framenumber*256/44100)}', end='\r')
             framenumber += 1
             if all(byte == 0 for byte in frame[1:11]): #LP mode frame
                 if frame[12] >> 2 == 0x28:
                     if current_mode != "LP4":
-                        print("New LP4 Track detected")
+                        print("\nNew LP4 Track detected")
                         current_mode = "LP4"
                         track_counter += 1
                         output_data[str(track_counter)] = {}
                         output_data[str(track_counter)]['type'] = 'LP4'
                         output_data[str(track_counter)]['data'] = bytearray()
                 elif current_mode != "LP2":
-                    print("New LP2 Track detected")
+                    print("\nNew LP2 Track detected")
                     current_mode = "LP2"
                     track_counter += 1
                     output_data[str(track_counter)] = {}
@@ -40,7 +39,7 @@ def main():
                 output_data[str(track_counter)]['data'] += frame[12:204]
             else: #SP Mode
                 if current_mode != "SP":
-                    print("New SP track detected")
+                    print("\nNew SP track detected")
                     current_mode = "SP"
                     track_counter += 1
                     output_data[str(track_counter)] = {}
@@ -48,7 +47,7 @@ def main():
                     output_data[str(track_counter)]['data'] = bytearray()
                 output_data[str(track_counter)]['data'] += frame
 
-                 
+    print('\n')
     for track, data in output_data.items():
         print(f'Writing track {track}')
         if data['type'] == 'SP': 
