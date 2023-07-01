@@ -4,11 +4,11 @@ Assorted utilities for working with atrac files
 
 ## sp-to-lp
 
-removes SP encapsulation from LP frames stored in an aea file
+Removes SP encapsulation from LP frames stored in an aea file
 
-## lp-fixer
+## lp4-fixer
 
-Removes invalid LP frames from an LP file
+Removes invalid LP4 frames from an ATRAC3 wav file
 
 ## atracrec
 
