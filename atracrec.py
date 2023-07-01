@@ -20,7 +20,7 @@ def main():
         while (frame := input.read(212)):
             print(f'Processing SP time {timedelta(seconds=framenumber*256/44100)}', end='\r')
             framenumber += 1
-            if all(byte == 0 for byte in frame[1:211]): #Empty frame
+            if all(byte == 0 or byte == 0xff for byte in frame[1:211]): #Empty frame
                 current_mode = ""
                 continue
             if all(byte == 0 for byte in frame[1:11]): #LP mode frame
