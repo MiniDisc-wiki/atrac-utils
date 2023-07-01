@@ -9,6 +9,8 @@ def main():
                         help='Input File (AEA only)', required=True)
     parser.add_argument('--prefix', dest='prefix', action='store',
                         help='Output prefix for recovered files', required=True)
+    parser.add_argument('--minlength', dest='minlength', action='store',
+                        help='Minimum track length to write (in SP equivalent)', default=5)
     args = parser.parse_args()
     output_data = {}
     with open(args.input_file, 'rb') as input:
@@ -52,17 +54,21 @@ def main():
 
     print('\n')
     for track, data in output_data.items():
-        print(f'Writing track {track}')
-        if data['type'] == 'SP': 
-            extension = '.aea'
+        if len(data['data']) < args.minlength * 44100 / 256 * 212:
+            print(f'Track {track} shorter than minimum specified length, skipping...')
+            continue
         else:
-            extension = '.wav'
-        with open(f'{args.prefix}{track}{extension}', mode='wb') as output:
+            print(f'Writing track {track}')
             if data['type'] == 'SP': 
-                output.write(aea_header())
+                extension = '.aea'
             else:
-                output.write(generate_header(data['type'], len(data['data'])))
-            output.write(data['data'])
+                extension = '.wav'
+            with open(f'{args.prefix}{track}{extension}', mode='wb') as output:
+                if data['type'] == 'SP': 
+                    output.write(aea_header())
+                else:
+                    output.write(generate_header(data['type'], len(data['data'])))
+                output.write(data['data'])
     print("Done!")
     
 
