@@ -10,3 +10,8 @@ removes SP encapsulation from LP frames stored in an aea file
 
 Removes invalid LP frames from an LP file
 
+## atracrec
+
+*Like photocrec, for ATRAC*
+
+Takes an AEA file and splits tracks based on encapsulation switches, plus decapsulates ATRAC3 data

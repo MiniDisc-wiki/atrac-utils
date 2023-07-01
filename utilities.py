@@ -1,3 +1,12 @@
+def aea_header(channels = 2):
+    # This isn't a very complete implementation
+    header = bytearray()
+    header += (2048).to_bytes(4, 'little')
+    header += (0).to_bytes(256, 'little')
+    header += (1).to_bytes(4, 'little')
+    header += channels.to_bytes(1, 'little')
+    header += (0).to_bytes(2048-len(header), 'little')
+    return header
 
 def generate_header(format, length):
     header = bytearray()
